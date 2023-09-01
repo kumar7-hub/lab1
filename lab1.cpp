@@ -1,8 +1,8 @@
-//modified by:
-//date:
-//
-//author: Snehal Kumar
+//modified by: Snehal Kumar
 //date: 08-29-2023
+//
+//author: Gordon Griesel
+//date: Spring 2022
 //purpose: get openGL working on your personal computer
 //
 #include <iostream>
@@ -267,7 +267,7 @@ void render()
 	}
 	else if (g.xres > 450)
 	{
-	    glColors3f(0.0, 0.0, 1.0);
+	    glColor3f(0.0, 0.0, 1.0);
 	}
 	else 
 	{
