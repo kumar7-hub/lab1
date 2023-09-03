@@ -23,11 +23,11 @@ using namespace std;
 class Global {
 public:
 	int xres, yres;
-	float w;
-	float dir;
-	float pos[2];
+	float w; 
+	float dir; 
+	float pos[2]; 
 	Global();
-} g;
+} g; 
 
 class X11_wrapper {
 private:
@@ -40,7 +40,7 @@ public:
 	void set_title();
 	bool getXPending();
 	XEvent getXNextEvent();
-	void swapBuffers();
+	void swapBuffers(); 
 	void reshape_window(int width, int height);
 	void check_resize(XEvent *e);
 	void check_mouse(XEvent *e);
@@ -80,12 +80,12 @@ int main()
 
 Global::Global()
 {
-	xres = 400;
+	xres = 400;	
 	yres = 200;
-	w = 20.0f;
-	dir = 5.0f;
-	pos[0] = 0.0f + w;
-	pos[1] = yres / 2.0f;
+	w = 20.0f; 
+	dir = 0.5f; 
+	pos[0] = 0.0f + w; 
+	pos[1] = yres / 2.0f;  
 }
 
 X11_wrapper::~X11_wrapper()
@@ -94,7 +94,7 @@ X11_wrapper::~X11_wrapper()
 	XCloseDisplay(dpy);
 }
 
-X11_wrapper::X11_wrapper()
+X11_wrapper::X11_wrapper() 
 {
 	GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
 	int w = g.xres, h = g.yres;
@@ -162,13 +162,13 @@ void X11_wrapper::reshape_window(int width, int height)
 	glOrtho(0, g.xres, 0, g.yres, -1, 1);
 }
 
-void X11_wrapper::check_resize(XEvent *e)
+void X11_wrapper::check_resize(XEvent *e) 
 {
 	//The ConfigureNotify is sent by the
 	//server if the window is resized.
 	if (e->type != ConfigureNotify)
 		return;
-	XConfigureEvent xce = e->xconfigure;
+	XConfigureEvent xce = e->xconfigure; 
 	if (xce.width != g.xres || xce.height != g.yres) {
 		//Window size did change.
 		reshape_window(xce.width, xce.height);
@@ -236,61 +236,59 @@ int X11_wrapper::check_keys(XEvent *e)
 void init_opengl(void)
 {
 	//OpenGL initialization
-	glViewport(0, 0, g.xres, g.yres);
+	glViewport(0, 0, g.xres, g.yres); 
 	//Initialize matrices
-	glMatrixMode(GL_PROJECTION); glLoadIdentity();
+	glMatrixMode(GL_PROJECTION); glLoadIdentity(); 
 	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
 	//Set 2D mode (no perspective)
-	glOrtho(0, g.xres, 0, g.yres, -1, 1);
+	glOrtho(0, g.xres, 0, g.yres, -1, 1); 
 	//Set the screen background color
-	glClearColor(0.1, 0.1, 0.1, 1.0);
+	glClearColor(0.1, 0.1, 0.1, 1.0); 
 }
 
-void physics()
+void physics() 
 {
-        g.pos[0] += g.dir;
-	if (g.pos[0] >= (g.xres-g.w)) {
-		g.pos[0] = (g.xres-g.w);
-		g.dir = -g.dir;
+	g.pos[0] += g.dir;  
+	if (g.pos[0] >= (g.xres-g.w)) { 
+		g.pos[0] = (g.xres-g.w); 
+		g.dir = -g.dir; 
 	}
 	if (g.pos[0] <= g.w) {
 		g.pos[0] = g.w;
 		g.dir = -g.dir;
 	}
-}
+} 
 
 void render()
 {
-    	if (g.xres < 350)
-	{
-	    glColor3f(1.0, 0.0, 0.0);
-	}
-	else if (g.xres > 450)
-	{
-	    glColor3f(0.0, 0.0, 1.0);
-	}
-	else 
-	{
-	   glColor3ub(150, 160, 220);
-	}
-
 	glClear(GL_COLOR_BUFFER_BIT);
-	//Draw box.
-	glPushMatrix();
-	glColor3f(1.0, 0.0, 0.0);
-	//glColor3ub(150, 160, 220);
-	glTranslatef(g.pos[0], g.pos[1], 0.0f);
+	//Draw box. 
+	glPushMatrix(); 
+	
+	glTranslatef(g.pos[0], g.pos[1], 0.0f); 
 	glBegin(GL_QUADS);
-		glVertex2f(-g.w, -g.w);
-		glVertex2f(-g.w, g.w);
-		glVertex2f( g.w,  g.w);
+		glVertex2f(-g.w, -g.w); 
+		glVertex2f(-g.w,  g.w); 
+		glVertex2f( g.w,  g.w); 
 		glVertex2f( g.w, -g.w);
+
+	if (g.xres < g.w) {
+            	// if win size is less than box width, box disappears
+	    	glColor3f(0.1, 0.1, 0.1); 
+	}
+	else if (g.xres < 400) {
+	    	 // if win size is less than 400, change color to red
+	   	 glColor3f(1.0, 0.0, 0.0);
+	}
+	else if (g.xres > 400) {
+	    	// if win size is greater than 400, change color to blue
+	   	 glColor3f(0.0, 0.0, 1.0);
+	}
+	else {
+	   	// default color
+	   	glColor3f(0.6, 0.63, 0.86); 
+	}
+	
 	glEnd();
-	glPopMatrix();
+	glPopMatrix(); 
 }
-
-
-
-
-
-
