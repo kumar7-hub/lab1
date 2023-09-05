@@ -83,7 +83,7 @@ Global::Global()
 	xres = 400;	
 	yres = 200;
 	w = 20.0f; 
-	dir = 0.5f; 
+	dir = 25.0f; 
 	pos[0] = 0.0f + w; 
 	pos[1] = yres / 2.0f;  
 }
